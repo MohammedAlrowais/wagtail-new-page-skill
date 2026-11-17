@@ -1,13 +1,12 @@
 ---
 name: new-page
-description: Build a new Wagtail page type (detail page plus optional index/listing page) in any Django + Wagtail project. Learns how the project is set up, asks the user the right questions in pop-ups, shows a plan to confirm, builds it, then verifies it against a performance and quality checklist. Use when the user says "/new-page <name>", "let's build an events page", "add a news page", or similar.
-argument-hint: <page name, e.g. events>
+description: Build a new Wagtail page type (detail page plus optional index/listing page) in any Django + Wagtail project. Learns how the project is set up, asks the user the right questions, shows a plan to confirm, builds it, then verifies it against a performance and quality checklist. Use when the user asks to build or add a page type, e.g. "new-page events", "let's build an events page", "add a news page".
 ---
 
 # New Wagtail page
 
-Build the page type the user asks for (`$ARGUMENTS`, e.g. "events") in five
-phases. **Never skip phase 2 or 3.** Do not write code before the user
+Build the page type the user asks for (e.g. "events") in five phases. If
+the user didn't name one, ask which page they want first. **Never skip phase 2 or 3.** Do not write code before the user
 confirms the plan.
 
 Ground rules for every phase:
@@ -35,8 +34,8 @@ Note the Wagtail and Django versions; some APIs depend on them (see
 
 Work out each item below, then show the user a short **Project profile**
 (one line per item) at the start of your Phase 2 message, so they can
-correct anything wrong. If the project's `CLAUDE.md` or `README` already
-answers an item, use it.
+correct anything wrong. If the project's README or agent instructions file
+(`AGENTS.md` or similar) already answers an item, use it.
 
 | Item | How to find it |
 |---|---|
@@ -55,10 +54,11 @@ answers an item, use it.
 
 ## Phase 2 — Ask questions
 
-Ask with the **AskUserQuestion tool** (pop-ups), not as a numbered text
-message. Adapt every question and option to the page type (an event needs
-dates and a place; a news article needs an author) and to the Project
-profile (e.g. offer to reuse an existing snippet).
+Ask in a way the user can answer quickly. If your environment has a
+multiple-choice question tool (clickable options), use it; otherwise ask in
+a short numbered message. Adapt every question and option to the page type
+(an event needs dates and a place; a news article needs an author) and to
+the Project profile (e.g. offer to reuse an existing snippet).
 
 The topics to cover, each with a suggested default:
 
@@ -72,21 +72,22 @@ The topics to cover, each with a suggested default:
 7. **Language** — labels wrapped in `_()` (default if the project does it)
 8. **App** — new app (suggest a name) or an existing one
 
-Tool limits: at most **4 questions per call** and **2–4 options per
-question**. The user can always pick "Other" and type, so never add an
-"Other" option yourself. Put the recommended option first and add
-"(Recommended)" to its label. Use `multiSelect: true` when choices can be
-combined (fields, filters, blocks, extras).
+Question style:
+- Ask at most **4 questions at a time**, each with **2–4 options**. The
+  user can always answer in their own words, so don't add an "Other"
+  option.
+- Put the recommended option first and mark it "(Recommended)".
+- Say when several options can be picked together (fields, filters,
+  blocks, extras).
 
 ### Round 1: defaults or not
 
 First write a short message with the Project profile and your suggested
-default for all 8 topics (the pop-up can't show a long list). Then ask one
-question: "Use these defaults for the <name> page?" with the options
-**Use defaults (Recommended)** and **Answer each**.
-If the user picks the defaults, go straight to Phase 3.
+default for all 8 topics. Then ask one question: "Use these defaults for
+the <name> page?" with the options **Use defaults (Recommended)** and
+**Answer each**. If the user picks the defaults, go straight to Phase 3.
 
-### Round 2 and 3: one pop-up each
+### Round 2 and 3
 
 If the user picks "Answer each":
 - Round 2: topics 1–4 (fields, body, structure, listing).
@@ -98,10 +99,6 @@ If the user picks "Answer each":
 If a topic needs more options than fit (for example more than 4 fields),
 group them into options of 2–3 related fields ("Dates & location",
 "Image + summary") rather than dropping any.
-
-If AskUserQuestion is not available in this session, fall back to one
-numbered text message with a default for each topic and let the user reply
-"defaults".
 
 ## Phase 3 — Show the plan, wait for confirmation
 

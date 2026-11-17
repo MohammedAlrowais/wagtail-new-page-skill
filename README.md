@@ -1,9 +1,12 @@
 # wagtail-new-page-skill
 
-A [Claude Code](https://claude.com/claude-code) skill that builds a new
-Wagtail page type (a detail page plus an optional listing page) in any
-Django + Wagtail project, then checks the result against a performance and
-quality checklist.
+An AI agent skill that builds a new Wagtail page type (a detail page plus an
+optional listing page) in any Django + Wagtail project, then checks the
+result against a performance and quality checklist.
+
+A skill is a plain Markdown instruction file ([`new-page/SKILL.md`](new-page/SKILL.md)).
+It works with any AI coding agent and any model that can read your files
+and run commands in your project.
 
 ## What it does
 
@@ -11,8 +14,8 @@ quality checklist.
 2. Learns how your project is set up: how to run commands (Docker, uv,
    Poetry, venv), where apps live, your root page, test style, linters,
    templates and CSS framework.
-3. Asks you questions in pop-ups (fields, body, structure, listing,
-   categories, images, language, app), with a "use defaults" shortcut.
+3. Asks you questions (fields, body, structure, listing, categories,
+   images, language, app), with a "use defaults" shortcut.
 4. Shows a plan and waits for your yes.
 5. Builds the models, snippet, StreamField blocks, filters, templates,
    migration and tests.
@@ -22,33 +25,38 @@ quality checklist.
 
 ## Install
 
-Copy the [`new-page`](new-page) folder to one of these locations:
-
-| Location | Available in |
-|---|---|
-| `<your project>/.claude/skills/new-page/` | That project only (and anyone who clones it) |
-| `~/.claude/skills/new-page/` | All your projects |
-
-For example, for all your projects:
+Get the files:
 
 ```bash
 git clone https://github.com/MohammedAlrowais/wagtail-new-page-skill.git
-mkdir -p ~/.claude/skills
-cp -r wagtail-new-page-skill/new-page ~/.claude/skills/
 ```
 
-Then start a new Claude Code session (skills load when a session starts).
+Then use one of these:
+
+- **Your agent supports skills** (folders with a `SKILL.md`): copy the
+  [`new-page`](new-page) folder into its skills folder, either in your
+  project or in your home directory. Check your agent's docs for the path.
+- **Any other agent:** copy `new-page/SKILL.md` into your project (for
+  example `docs/skills/new-page.md`) and point the agent at it.
 
 ## Use
 
+With skills support, ask for a page by name, for example:
+
 ```
-/new-page events
+new-page events
 ```
 
-or just ask: "let's build a news page".
+or just: "let's build a news page".
+
+With any other agent:
+
+```
+Follow docs/skills/new-page.md to build an events page.
+```
 
 ## Requirements
 
 - A Django project with Wagtail installed and set up (Wagtail 5+ recommended).
-- Claude Code, with permission to run your project's commands (tests,
-  migrations) so it can verify its work.
+- An AI coding agent that can read and edit files and run commands (tests,
+  migrations) in your project, so it can verify its work.
